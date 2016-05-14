@@ -1,0 +1,54 @@
+<div id="console"></div>
+<form id="input">
+	<input id="msg" type="text" autocomplete="off"></input>
+</form>
+<style>
+	body{
+		padding:0;
+		margin:0;
+	}
+	#console{
+		background:black;
+		color:white;
+		padding:4px;
+		border:1px solid gray;
+	}
+	#input, #input input{
+		width:100%;
+	}
+	#input input{
+		background:black;
+		border:1px solid gray;
+		color:white;
+		padding:4px;
+	}
+</style>
+<script>
+	var ws;
+	document.addEventListener("DOMContentLoaded", function(event) { 
+		var con = document.getElementById("console");
+		var inp = document.getElementById("msg");
+		ws = new WebSocket("ws://83.250.134.146:8080");
+		ws.onopen = function (event) {
+		  	ws.send(JSON.stringify({
+		  		action:"sub",
+		  		channel:"global"
+		  	})); 
+		  	ws.onmessage = function (event) {
+		  		var obj = JSON.parse(event.data);
+			  	con.innerHTML = con.innerHTML+"#"+obj.channel+"> "+obj.message+"<br>";
+			};
+		};
+		document.getElementById("input").onsubmit = function(){
+			var m = JSON.stringify({
+		  		action:"shout",
+		  		channel:"global",
+		  		message:inp.value
+		  	});
+			ws.send(m); 
+		  	console.log(m);
+			inp.value = "";
+			return false;
+		};
+	});
+</script>
