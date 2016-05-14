@@ -28,7 +28,8 @@
 	document.addEventListener("DOMContentLoaded", function(event) { 
 		var con = document.getElementById("console");
 		var inp = document.getElementById("msg");
-		ws = new WebSocket("ws://83.250.134.146:8080");
+
+		ws = new WebSocket("ws://"+window.location.hostname+":8080");
 		ws.onopen = function (event) {
 		  	ws.send(JSON.stringify({
 		  		action:"sub",
