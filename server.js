@@ -19,15 +19,19 @@ wss.on('connection', function connection(ws) {
     var req = JSON.parse(message);//TODO error handling?
     switch(req.action){
       case 'sub': 
-        shout.sub(ws,req.channel);
+        if(req.channel.length > 0 && req.channel.length <= 32){
+          shout.sub(ws,req.channel);
+        }
         break;
       case 'unsub':
         shout.unsub(ws,req.channel);
         break;
       case 'shout':
-        shout.broadcast(req.channel,ws.username + ": " + req.message);
+        if(req.message.length > 0 && req.message.length < 256){
+          shout.broadcast(req.channel,ws.username + ": " + req.message);
+        }
         break;
-    }
+    } 
   });
   ws.on('close', function close() {
     shout.unsub(ws);
