@@ -1,20 +1,52 @@
-<div id="console"></div>
-<form id="input">
-	<input id="msg" type="text" autocomplete="off"></input>
-</form>
+
+<div id="container">
+	<div id="console-wrapper">
+		<div id="console">
+		</div>
+		<form id="input">
+			<input id="msg" type="text" autocomplete="off"></input>
+		</form>
+	</div>
+</div>
+
+
 <style>
 	body{
 		padding:0;
 		margin:0;
 	}
-	#console{
+	#container{
+		position:absolute;
+		top:0px;
+		left:0px;
+		right:0px;
+		bottom:0px;
+	}
+	#console-wrapper{
 		background:black;
 		color:white;
-		padding:4px;
-		border:1px solid gray;
+		position:absolute;
+		top:0px;
+		bottom:0px;
+		right:0px;
+		left:0px;
+	}
+	#console{
+		position:absolute;
+		top:0px;
+		bottom:0px;
+		right:0px;
+		left:0px;
+		overflow:scroll;
+		padding:6px;
+	}
+	#input{
+		position:absolute;
+		bottom:0px;
 	}
 	#input, #input input{
 		width:100%;
+		margin:0px;
 	}
 	#input input{
 		background:black;
