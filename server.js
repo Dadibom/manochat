@@ -5,6 +5,8 @@ var app = express();
 var server = require('http').createServer();
 var WebSocketServer = require('ws').Server
   , wss = new WebSocketServer({ port:8080 })
+var Filter = require('bad-words'),
+  filter = new Filter();
 
 app.use(express.static('public'));
 
@@ -36,13 +38,16 @@ wss.on('connection', function connection(ws) {
           break;
         case 'shout':
           if(req.message.length > 0 && req.message.length < 256){
-            shout.broadcast(req.channel,ws.username + ": " + req.message);
+            shout.broadcast(req.channel,ws.username + ": " + filter.clean(req.message));
           }
           break;
       }
     }else{//user has not selected a username
       if(req.action == "auth"){
-        if(req.username.length <3 || req.username.length >25 || req.username === "dick" ){ //TODO better bad word handling
+        if(req.username.split("*").length != filter.clean(req.username).split("*").length)
+          return;
+
+        if(req.username.length <3 || req.username.length >25){
           return;
         }
         ws.username = req.username;
