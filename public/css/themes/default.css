@@ -1,0 +1,65 @@
+#channels a{
+	background:#8470ff;
+	font-weight:bold;
+	text-decoration: none;
+	color:white;
+	padding:4px;
+	border-radius:4px;
+	display:inline-block;
+	margin:2px;
+}
+
+#channels a:not(.selected):hover{
+	background:#a692ff;
+	text-decoration:underline;
+}
+
+#channels .selected{
+	background:orange;
+}
+
+
+
+#messages{
+	color:#333;
+	overflow-x:hidden;
+	overflow-y:auto;
+	position:absolute;
+	top:28px;
+	bottom:24px;
+	width:100%;
+}
+
+.channel{
+	background:#666;
+	color:white;
+}
+
+#input{
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	right:0px;
+}
+
+#input #message-field-wrapper{
+	position:absolute;
+	left:0px;
+	right:64px;
+	bottom:0px;
+}
+
+#input #message-field{
+	box-sizing: border-box;
+	width:100%;
+}
+
+#input #submit-button{
+	background:green;
+	border:none;
+	position:absolute;
+	right:0px;
+	bottom:0px;
+	padding:3px 16px;
+	box-sizing: border-box;
+}

@@ -6,15 +6,19 @@ var server = require('http').createServer();
 var WebSocketServer = require('ws').Server
   , wss = new WebSocketServer({ port:8080 })
 
-app.use(express.static('html'));
+app.use(express.static('public'));
+
+//app.get("/test",function(req,res){
+//  res.send('hello world');
+//});
 
 wss.on('connection', function connection(ws) {
   var location = url.parse(ws.upgradeReq.url, true);
   // you might use location.query.access_token to authenticate or share sessions
   // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
   var path = location.path;
+  
   ws.username = haiku();
-
   ws.on('message', function incoming(message) {
     var req = JSON.parse(message);//TODO error handling?
     switch(req.action){
