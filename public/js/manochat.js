@@ -1,7 +1,7 @@
 var ws;
 document.addEventListener("DOMContentLoaded", function(event) { 
 	var con = document.getElementById("messages");
-	var inp = document.getElementById("msg");
+	var inp = document.getElementById("message-field");
 
 	ws = new WebSocket("ws://"+window.location.hostname+":8080");
 	ws.onopen = function (event) {
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	  		message:inp.value
 	  	});
 		ws.send(m); 
-	  	console.log(m);
+	  	//console.log(m);
 		inp.value = "";
 		return false;
 	};
