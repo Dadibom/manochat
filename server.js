@@ -13,29 +13,46 @@ app.use(express.static('public'));
 //});
 
 wss.on('connection', function connection(ws) {
+  ws.send(JSON.stringify({
+    action: 'suggest-username',
+    username: haiku()
+  }));
   var location = url.parse(ws.upgradeReq.url, true);
   // you might use location.query.access_token to authenticate or share sessions
   // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
   var path = location.path;
   
-  ws.username = haiku();
   ws.on('message', function incoming(message) {
     var req = JSON.parse(message);//TODO error handling?
-    switch(req.action){
-      case 'sub': 
-        if(req.channel.length > 0 && req.channel.length <= 32){
-          shout.sub(ws,req.channel);
+    if(ws.username){
+      switch(req.action){
+        case 'sub': 
+          if(req.channel.length > 0 && req.channel.length <= 32){
+            shout.sub(ws,req.channel);
+          }
+          break;
+        case 'unsub':
+          shout.unsub(ws,req.channel);
+          break;
+        case 'shout':
+          if(req.message.length > 0 && req.message.length < 256){
+            shout.broadcast(req.channel,ws.username + ": " + req.message);
+          }
+          break;
+      }
+    }else{//user has not selected a username
+      if(req.action == "auth"){
+        if(req.username.length <3 || req.username.length >25 || req.username === "dick" ){ //TODO better bad word handling
+          return;
         }
-        break;
-      case 'unsub':
-        shout.unsub(ws,req.channel);
-        break;
-      case 'shout':
-        if(req.message.length > 0 && req.message.length < 256){
-          shout.broadcast(req.channel,ws.username + ": " + req.message);
-        }
-        break;
-    } 
+        ws.username = req.username;
+        ws.send(JSON.stringify({
+          action: 'auth',
+          accepted:true
+        }));
+      }
+
+    }
   });
   ws.on('close', function close() {
     shout.unsub(ws);
