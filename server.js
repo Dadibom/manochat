@@ -25,11 +25,16 @@ wss.on('connection', function connection(ws) {
   var path = location.path;
   
   ws.on('message', function incoming(message) {
-    var req = JSON.parse(message);//TODO error handling?
+    var req;
+    try{
+      req = JSON.parse(message);//TODO error handling?
+    }catch(e){
+      return;
+    }
     if(ws.username){
       switch(req.action){
         case 'sub': 
-          if(req.channel.length > 0 && req.channel.length <= 32){
+          if(req.channel && req.channel.length > 0 && req.channel.length <= 32){
             shout.sub(ws,req.channel);
           }
           break;
@@ -37,13 +42,13 @@ wss.on('connection', function connection(ws) {
           shout.unsub(ws,req.channel);
           break;
         case 'shout':
-          if(req.message.length > 0 && req.message.length < 256){
+          if(req.message && req.message.length > 0 && req.message.length < 256){
             shout.broadcast(req.channel,ws.username + ": " + filter.clean(req.message));
           }
           break;
       }
     }else{//user has not selected a username
-      if(req.action == "auth"){
+      if(req.action == "auth" && req.username){
         if(req.username.split("*").length != filter.clean(req.username).split("*").length)
           return;
 
