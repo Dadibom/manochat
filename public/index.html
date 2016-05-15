@@ -14,7 +14,7 @@
 		</div>
 		<div id="messages">
 		</div>
-		<form id="input" action="#">
+		<form id="input" action="#" onsubmit="return sendMessage()">
 			<div id="message-field-wrapper">
 				<input id="message-field" type="text" autocomplete="off"></input>
 			</div>
@@ -24,7 +24,7 @@
 	<div id="popup-blocker">
 		<div id="popup-anchor">
 			<div id="popup-container">
-				<form onsubmit="auth()" action="#">
+				<form onsubmit="return auth()" action="#">
 					Username: <input type="text" id="username-input">
 				</form>
 			</div>

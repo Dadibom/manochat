@@ -1,12 +1,10 @@
 var ws;
 document.addEventListener("DOMContentLoaded", function(event) { 
 	var con = document.getElementById("messages");
-	var inp = document.getElementById("message-field");
 
 	ws = new WebSocket("ws://"+window.location.hostname+":8080");
 	ws.onopen = function (event) {
 	  	ws.onmessage = function (event) {
-	  		console.log(event);
 	  		var obj = JSON.parse(event.data);
 
 	  		switch(obj.action){
@@ -28,7 +26,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 		};
 	};
-	document.getElementById("input").onsubmit = function(){
+});
+
+function sendMessage(){
+		var inp = document.getElementById("message-field");
 		send({
 	  		action:"shout",
 	  		channel:"global",
@@ -37,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		inp.value = "";
 		return false;
 	};
-});
 
 function send(obj){
 	//TODO if socket is not yet connected
